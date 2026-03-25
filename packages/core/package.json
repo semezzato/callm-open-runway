@@ -1,0 +1,13 @@
+{
+  "name": "@callm/core",
+  "version": "1.0.0",
+  "description": "caLLM Core Logic",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

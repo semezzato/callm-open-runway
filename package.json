@@ -1,0 +1,19 @@
+{
+  "name": "callm-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "caLLM / Open Runway - Universal LLM Orchestrator Monorepo",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "cli:dev": "npm run dev -w apps/cli",
+    "cli:build": "npm run build -w apps/cli",
+    "test": "npm test --workspaces"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.1"
+  }
+}

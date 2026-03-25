@@ -1,0 +1,49 @@
+Este é um projeto novo. Este é um daqueles projetos Open Source de sucesso no github, sabe? Facilitar a minha vida e a vida de todos os desenvolvedores sênior raiz e vibecoders experts, "Keep callm and runway" (fazendo referência a "modelos de passarela", run=rodar, runway=passarela, callm=calm, as letras "llm" de "callm" é tipo "llm=models", os modelos de LLMs). O nome é "caLLM" ou "Open Runway".
+
+Vamos desenvolver tipo um ollama, mas que realmente dê para usar em windows, linux, macs, etc, para interação tanto terminal CLI bem feita e formatada, quanto no app de desktop e no web app.
+Vamos fazer com que ele tenha interação via browser navegando tipo "DOM" para automatizar ou interpretar dados (igual o antigravity e o claude code faz).
+E que também seja um orquestrador universal para todas as linguagens, frameworks e stacks, ou seja, sem mais essa dificuldade de ficar instalando e trocando de framework, nossa ferramenta serve de base para qualquer tipo de projeto, seja ele web, mobile, desktop, iot, game, se vem de ferramentas vibecode tipo o Replit, Claude Code, Lovable, Antigravity, etc, ou se é React, Laravel, Django, Spring, etc.
+
+Através do comando "callm gita" é construída uma pasta (/.callm) onde é feito um check-up do projeto, onde é investigado, identificado e criados todos os documentos necessários para que possamos continuar o desenvolvimento do projeto sem dores de cabeça para reconfigurar o ambiente de desenvolvimento e ambiente de contexto, e sem perda de dados ou de acesso à database quando "git clonar" (migrar) o repositório do Replit/Lovable/Antigravity/etc para o GitHub/GitLab/Bitbucket/etc e deles para o meu pc.
+O comando "callm gita" inicia um diretório na raiz do projeto, (/.callm/ZEN.md) documento "ZEN.md" que elabora conceitos inteligentes de "anti-vibecoding"; redução efetiva de 90% do gasto de tokens através de diretrizes diretas e automatizadas para calibrar a linha de pensamento, ação e respostas do LLM; TDD; Segurança; Security by Design; Desenvolvendo projetos com a mente de um hacker de elite; Arquitetura hexagonal quando cabível; 12 factor app; Design patterns; Anti-frankenstein(akitaonrails.com); anti-fragil, etc.
+Também podemos configurar coisas como o que o antigravity faz e outros diferenciais:
+- /.callm/ZEN.md (Documento mestre de enciclopédia, livro de regras e diretrizes de desenvolvimento e/ou migração)
+- /.callm/frontend/FRONTEND.md (Identifica e configura react, vue, svelte, etc e suas versões, UI/UX)
+- /.callm/backend/BACKEND.md (Identifica e configura node, python, php, etc e suas versões, Banco de dados, etc)
+- /.callm/skills/<SKILL_NAME>/<SKILL_NAME>.md (Gerir habilidades específicas do projeto)
+- /.callm/workflows/<WORKFLOW_NAME>/<WORKFLOW_NAME>.md (Gerir fluxos de trabalho)
+- /.callm/plugins/<PLUGIN_NAME>/<PLUGIN_NAME>.md (Gerir plugins)
+- /.callm/mcps/<MCP_NAME>/<MCP_NAME>.md (Gerir MCPs)
+- /.callm/llms/<LLM_NAME>/<LLM_NAME>.md (Pode injetar diretrizes inteligentes para economia de tokens e memória, associar API Key, ou usar local, etc)
+- /.callm/agents/<AGENT_NAME>/<AGENT_NAME>.md (Gerir agentes autônomos que fazem tarefas específicas)
+- /.callm/group-agents/<GROUP_AGENT_NAME>/<GROUP_AGENT_NAME>.md (Gerir grupos de agentes e suas interações)
+- /.callm/neurons/<NEURON_NAME>/<NEURON_NAME>.md (Gerir neurônios digitais, que são tipo "memórias" ou "conhecimentos" que o agente utiliza para aprender e se desenvolver autonomamente)
+- /.callm/synapses/<SYNAPSE_NAME>/<SYNAPSE_NAME>.md (Gerir sinapses, que são tipo "conexões" entre neurônios, que fazem o agente relacionar informações e aprender e se desenvolver autonomamente, quanto mais repete uma ação, mais forte fica a sinapse, etc)
+- /.callm/hygiene/HYGIENE.md (Gerir higiene do projeto, que são tipo "limpezas" ou "organizações" que o agente faz no projeto para manter ele organizado e limpo, tipo uma higiene do sono, mas para projetos de software, etc, corrigindo erros, limpando sujeiras de desembaraço de cadeias de contexto, pensamento, ação e alucinação.)
+-/.callme/git/<.github> (Para integrar/remontar as configurações git, tipo ".github/workflows")
+
+
+A nossa diferença é já vir com um pacote base que entrega bibliotecas mais comuns para desenvolvimento (git, curl, wget, vim, build-essential, python3, nodejs, php, apache2, sqlite3, postgresql, nginx, etc), pentesting (kali-linux-default, etc). E também nossa diferença é poder utilizar/instalar imagens do huggingface, do docker, etc. Poder associar facilmente qualquer API Key paga ou gratuita de LLM, seja local ou remota, como a do gemini, openai, anthropic, etc.
+
+Quero poder instalar com facilidade via terminal, quero poder dar comandos no terminal tipo:
+- "callm gemini" e ele já me responder com o gemini (pode ser via api ou local)
+- "callm claude" e ele me responder com o claude (pode ser via api ou local)
+- "callm ollama" e ele me responder com o ollama (pode ser via api ou local)
+- "callm local" e ele me responder com o modelo local que eu tiver instalado, etc. (call qwen, call deepseek, etc)
+E também quero poder dar comandos tipo:
+- "callm run" e ele abrir o app de desktop (callm r)
+- "callm web" e ele abrir o app web (callm w)
+- "callm server" e ele abrir o servidor. (callm s)
+- "callm help" e ele me mostrar todas as opções de comandos disponíveis. (callm h)
+- "callm install" e ele me mostrar todas as opções de instalação disponíveis. (callm i qwen3.1:8b, callm i python3.11, callm i lua, etc)
+- "callm uninstall" e ele me mostrar todas as opções de desinstalação disponíveis. (callm u qwen3.1:8b, callm u python3.11, etc)
+- "callm update" e ele me mostrar todas as opções de atualização disponíveis. (callm up qwen3.1:8b, callm up python3.11, etc)
+- "callm upgrade" e ele me mostrar todas as opções de upgrade disponíveis. (callm upg qwen3.1:8b, callm upg python3.11, etc)
+- "callm downgrade" e ele me mostrar todas as opções de downgrade disponíveis. (callm dow qwen3.1:8b, callm dow python3.11, etc)
+- "callm rollback" e ele me mostrar todas as opções de rollback disponíveis. (callm r qwen3.1:8b, callm r python3.11, etc)
+- "callm backup" e ele me mostrar todas as opções de backup disponíveis. (callm b qwen3.1:8b, callm b python3.11, etc)
+- "callm restore" e ele me mostrar todas as opções de restore disponíveis. (callm r qwen3.1:8b, callm r python3.11, etc)
+- "callm config" e ele me mostrar todas as opções de configuração disponíveis
+
+Tudo isso deve ser leve, simples, solucionador, funcional, profissional, seguro, amado.
+Muitos passos virão ainda.

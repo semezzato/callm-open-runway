@@ -1,0 +1,26 @@
+{
+  "name": "@callm/cli",
+  "version": "1.0.0",
+  "description": "caLLM CLI",
+  "main": "dist/index.js",
+  "bin": {
+    "callm": "./dist/cli/index.js"
+  },
+  "scripts": {
+    "dev": "ts-node src/cli/index.ts",
+    "build": "tsc",
+    "start": "node dist/cli/index.js"
+  },
+  "dependencies": {
+    "commander": "^11.0.0",
+    "chalk": "^4.1.2",
+    "fs-extra": "^11.1.1",
+    "@callm/core": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/fs-extra": "^11.0.1",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.1"
+  }
+}
