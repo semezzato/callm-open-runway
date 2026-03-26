@@ -62,8 +62,19 @@ program
 program
   .command('server')
   .alias('s')
-  .description('Abre o servidor')
-  .action(() => console.log(chalk.green('Iniciando Servidor caLLM...')));
+  .description('Abre o servidor caLLM API')
+  .action(() => {
+    console.log(chalk.blue('Iniciando Servidor caLLM API...'));
+    const { spawn } = require('child_process');
+    const server = spawn('npm', ['run', 'dev', '-w', 'apps/server'], { 
+      stdio: 'inherit',
+      shell: true 
+    });
+    
+    server.on('close', (code: number) => {
+      console.log(chalk.yellow(`Servidor encerrado com código ${code}`));
+    });
+  });
 
 // Comandos de Gerenciamento
 const managementCmds = [

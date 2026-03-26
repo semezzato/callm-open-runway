@@ -1,64 +1,74 @@
-# 🚀 caLLM (Open Runway) — O Orquestrador Universal de Elite
+# caLLM (Open Runway) — Universal LLM Orchestrator
 
-![caLLM Banner](https://img.shields.io/badge/caLLM-Open_Runway-blue?style=for-the-badge&logo=rocket)
-![Stability](https://img.shields.io/badge/Stability-Experimental-orange?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+[![caLLM Badge](https://img.shields.io/badge/caLLM-Open_Runway-blue?style=for-the-badge&logo=rocket)](https://github.com/semezzato/callm-open-runway)
+[![Stability](https://img.shields.io/badge/Stability-Experimental-orange?style=for-the-badge)](#)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](#)
 
-**caLLM** (pronuncia-se *calm*) ou **Open Runway** é uma ferramenta de orquestração universal projetada para desenvolvedores sêniores e "vibecoders" que buscam performance, economia de tokens e controle total sobre modelos de linguagem (LLMs).
+**caLLM** (pronounced *calm/call-em*) or **Open Runway** is a high-performance orchestration engine designed for senior developers and "vibecoders" who demand precision, technical logic, and extreme efficiency.
 
-> "Keep caLLM and Runway" — Mantenha a calma e rode seus modelos na passarela da automação de elite.
-
----
-
-## 🌟 Diferenciais
-- **Anti-Vibecoding**: Filosofia de desenvolvimento focada em precisão, lógica e evidência.
-- **Ecossistema 360°**: Use via CLI, App Desktop (Tauri), Web, Mobile e até Extensão de Browser.
-- **Interação DOM Real**: Motor integrado para navegar e extrair dados de sites como um humano.
-- **Orquestrador Universal**: Independente de stack, linguagem ou framework.
-- **Inteligência Local & Remota**: Integre perfeitamente com Gemini, Claude, OpenAI ou modelos locais via Ollama/llama.cpp.
+> **"Keep caLLM and Runway"** — Run your models on the elite automation runway with zero mental friction.
 
 ---
 
-## 🛠️ Stack Tecnológica (The Elite Choice)
-- **Monorepo**: Gestão centralizada de múltiplos canais.
-- **Tauri + React**: UI Desktop ultraleve e performática.
-- **Node.js + Playwright**: Automação de browser de última geração.
-- **SQLite**: Persistência de sessões e memória local robusta.
+## 🌟 Key Features
+- **Anti-Vibecoding Engine**: A logic-first development philosophy focused on 90% token reduction through structured thought and clean context management.
+- **Universal Multi-Channel**: Seamlessly switch between CLI, Desktop (Tauri), Web, Mobile (Capacitor), and Browser Extensions.
+- **Native Browser Interaction**: Integrated DOM manipulation engine to perform complex workflows or data extraction directly in the browser.
+- **Local & Remote Intelligence**: Native support for Google Gemini, Claude, OpenAI, and local models via Ollama or llama.cpp.
+- **Hacker-Centric Architecture**: Hexagonal design patterns, 12-factor compliance, and security-by-design at every layer.
 
 ---
 
-## 🚀 Como Começar (CLI)
+## 🛠️ Technological Stack
+- **Monorepo**: Centralized management of all applications and packages.
+- **Tauri + React**: Ultra-lightweight Desktop UI with native performance.
+- **Node.js + Playwright**: Next-gen browser automation and data mining.
+- **SQLite + Knex**: High-speed local persistence for conversation history and "digital neurons".
+- **Vitest**: Blazing fast TDD infrastructure for mission-critical reliability.
 
-### Instalação (Simulada)
+---
+
+## 🚀 Quick Start (CLI)
+
+### Install Dependencies
 ```bash
-npm install -g @callm/cli
+npm install
 ```
 
-### Comandos Principais
-- `callm gita`: Inicializa o ecossistema `/.callm` no seu projeto.
-- `callm gemini`: Abre uma sessão interativa com o Google Gemini.
-- `callm run`: Dispara a interface gráfica (Desktop App).
-- `callm config set-key <provider> <key>`: Configura suas chaves de API com segurança.
+### Core Commands
+- `callm gita`: Initialize the `/.callm` ecosystem in your project root.
+- `callm gemini`: Start an interactive high-fidelity chat session with Google Gemini.
+- `callm run`: Launch the premium Desktop GUI application.
+- `callm web`: Open the Web Dashboard.
+- `callm config`: Manage API keys and global orchestration settings.
 
 ---
 
-## 📂 Estrutura do Monorepo
-- `apps/cli`: Interface de linha de comando.
-- `apps/desktop`: Aplicativo Desktop de alta fidelidade.
-- `apps/mobile`: Versão para Android e iOS (em breve).
-- `packages/core`: O core lógico e orquestração de LLMs.
-- `packages/browser`: Motor de automação via Playwright.
+## 📂 Monorepo Structure
+- `apps/cli`: Power-user terminal interface.
+- `apps/desktop`: High-fidelity Desktop experience.
+- `apps/web`: Responsive web dashboard.
+- `apps/mobile`: Android & iOS native containers.
+- `apps/extension`: Browser-side intelligence.
+- `packages/core`: Unified business logic and LLM orchestration.
+- `packages/browser`: Browser automation engine.
 
 ---
 
 ## 📜 ZEN.md
-O coração do projeto reside nas diretrizes do `/.callm/ZEN.md`. Redução efetiva de até 90% no gasto de tokens através de diretrizes de pensamento estruturado e gestão de contexto limpa.
+The heart of caLLM. It contains the master guidelines for professional AI-assisted development, ensuring your projects remain clean, scalable, and resilient against "Frankenstein" patterns.
 
 ---
 
-## 🤝 Contribua
-Seja você um hacker de elite ou um entusiasta de IAs, o caLLM é para você. Sinta-se à vontade para abrir Issues e PRs.
+## 🤝 Contributing
+Built with ⚡ by the caLLM team. Join us in building the most advanced AI orchestration platform for hackers.
 
 ---
 
-**Desenvolvido com 🧠 e ⚡ pela equipe caLLM.**
+**MIT License © 2026 caLLM / Open Runway**
+
+---
+
+## Sponsor
+
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_a_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/ballanceado)
