@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { gitaCommand } from '../commands/gita';
+import { geminiCommand } from '../commands/gemini';
 
 const program = new Command();
 
@@ -19,8 +20,16 @@ program
   });
 
 // Comandos de LLM
-const llms = ['gemini', 'claude', 'ollama', 'local'];
-llms.forEach(llm => {
+program
+  .command('gemini')
+  .description('Interage com o modelo Gemini (Modo Interativo)')
+  .argument('[prompt]', 'O prompt para o modelo')
+  .action(async (prompt) => {
+    await geminiCommand(prompt);
+  });
+
+const otherLlms = ['claude', 'ollama', 'local'];
+otherLlms.forEach(llm => {
   program
     .command(llm)
     .description(`Interage com o modelo ${llm}`)

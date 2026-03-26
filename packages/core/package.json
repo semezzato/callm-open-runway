@@ -9,5 +9,10 @@
   },
   "devDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "knex": "^3.2.6",
+    "sqlite3": "^6.0.1"
   }
 }
