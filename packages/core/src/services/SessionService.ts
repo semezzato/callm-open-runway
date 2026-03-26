@@ -45,6 +45,15 @@ export class SessionService {
       .orderBy('created_at', 'asc');
   }
 
+  async listSessions(): Promise<any[]> {
+    return this.db('messages')
+      .select('session_id')
+      .count('id as message_count')
+      .max('created_at as last_message_at')
+      .groupBy('session_id')
+      .orderBy('last_message_at', 'desc');
+  }
+
   async close() {
     await this.db.destroy();
   }

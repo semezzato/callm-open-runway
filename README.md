@@ -1,9 +1,8 @@
 <p align="center">
-  <img src="./assets/Open-Runway-Logo.png" alt="caLLM Logo" width="200">
+  <img src="./assets/Open-Runway-Logo.png" alt="caLLM Logo" width="500">
 </p>
 
 # caLLM (Open Runway) — Universal LLM Orchestrator
-
 
 
 [![caLLM Badge](https://img.shields.io/badge/caLLM-Open_Runway-blue?style=for-the-badge&logo=rocket)](https://github.com/semezzato/callm-open-runway)

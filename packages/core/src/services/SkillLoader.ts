@@ -1,4 +1,6 @@
 import { IBaseSkill } from '../interfaces/ISkill';
+import path from 'path';
+import fs from 'fs';
 
 export class SkillLoader {
   private skills: Map<string, IBaseSkill> = new Map();
@@ -15,6 +17,26 @@ export class SkillLoader {
 
   getAllDefinitions() {
     return Array.from(this.skills.values()).map(s => s.getDefinition());
+  }
+
+  async loadFromDirectory(dirPath: string) {
+    if (!fs.existsSync(dirPath)) {
+      console.warn(`[SkillLoader] Diretório não encontrado: ${dirPath}`);
+      return;
+    }
+
+    const files = fs.readdirSync(dirPath).filter(f => f.endsWith('.js') || f.endsWith('.ts'));
+    for (const file of files) {
+      try {
+        const fullPath = path.resolve(dirPath, file);
+        const { default: SkillClass } = await import(fullPath);
+        if (SkillClass && typeof SkillClass === 'function') {
+          this.registerSkill(new SkillClass());
+        }
+      } catch (error: any) {
+        console.error(`[SkillLoader] Erro ao carregar skill ${file}:`, error);
+      }
+    }
   }
 
   async executeSkill(name: string, params: any): Promise<any> {

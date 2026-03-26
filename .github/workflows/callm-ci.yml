@@ -1,0 +1,40 @@
+name: caLLM CT/CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Lint Analysis
+        run: npm run lint
+        
+      - name: Continuous Testing (Unit & Integration)
+        run: npm test
+        
+      - name: Build Packages (Core, Browser)
+        run: npm run build
+        
+  security-audit:
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependency Audit
+        run: npm audit --audit-level=high

@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
-import { LlmService, SessionService, SkillLoader, FileSystemSkill, AgentService } from '@callm/core';
+import { LlmService, SessionService, SkillLoader, FileSystemSkill, BrowserSkill, AgentService } from '@callm/core';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -19,6 +19,11 @@ const agentService = new AgentService();
 
 // Registrar Skills Padrão
 skillLoader.registerSkill(new FileSystemSkill());
+skillLoader.registerSkill(new BrowserSkill());
+
+// Carregar Skills Dinâmicas
+const externalSkillsPath = path.resolve(process.cwd(), '.callm', 'skills');
+skillLoader.loadFromDirectory(externalSkillsPath);
 
 // Listar Agentes Disponíveis
 app.get('/api/agents', (req, res) => {
@@ -34,11 +39,10 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', engine: 'caLLM Open Runway' });
 });
 
-// Listar sessões (Ainda não implementado no Core, mas deixamos o mock por enquanto)
 app.get('/api/sessions', async (req, res) => {
   try {
-    // Nota: SessionService precisa de um método para listar sessões únicas
-    res.json([]);
+    const sessions = await sessionService.listSessions();
+    res.json(sessions);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
