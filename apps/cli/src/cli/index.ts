@@ -1,7 +1,16 @@
+#!/usr/bin/env node
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { gitaCommand } from '../commands/gita';
-import { geminiCommand } from '../commands/gemini';
+import dotenv from 'dotenv';
+import path from 'path';
+
+// Carrega .env do diretório atual de trabalho
+dotenv.config();
+// Também tenta carregar do diretório da .callm se existir
+dotenv.config({ path: path.join(process.cwd(), '.callm', '.env') });
+
+import { gitaCommand } from '../commands/gita.js';
+import { geminiCommand } from '../commands/gemini.js';
 
 const program = new Command();
 
@@ -55,9 +64,15 @@ program
 
 program
   .command('web')
-  .alias('w')
-  .description('Abre o app web')
-  .action(() => console.log(chalk.green('Iniciando Web App...')));
+  .action(() => {
+    console.log(chalk.green('Iniciando Web App (Vite)...'));
+    const { spawn } = require('child_process');
+    spawn('npx', ['vite', '--port', '5050', '--strictPort'], { 
+      cwd: 'apps/web',
+      stdio: 'inherit',
+      shell: true 
+    });
+  });
 
 program
   .command('server')
@@ -66,7 +81,8 @@ program
   .action(() => {
     console.log(chalk.blue('Iniciando Servidor caLLM API...'));
     const { spawn } = require('child_process');
-    const server = spawn('npm', ['run', 'dev', '-w', 'apps/server'], { 
+    const server = spawn('npx', ['tsx', 'src/index.ts'], { 
+      cwd: 'apps/server',
       stdio: 'inherit',
       shell: true 
     });
@@ -89,16 +105,33 @@ const managementCmds = [
   { name: 'config', alias: 'c', desc: 'Configurações do caLLM' }
 ];
 
+import { installHfCommand } from '../commands/install.js';
+
 managementCmds.forEach(cmd => {
-  program
+  const sub = program
     .command(cmd.name)
     .alias(cmd.alias)
-    .description(cmd.desc)
-    .argument('[target]', 'O alvo da ação (ex: qwen3.1:8b)')
-    .action((target) => {
-      console.log(chalk.magenta(`\n[caLLM] Executando ${cmd.name} para ${target || 'alvo padrão'}...`));
-      console.log(chalk.gray(`Processo ${cmd.name} iniciado (Simulação). Concluiremos em breve.`));
-    });
+    .description(cmd.desc);
+
+  if (cmd.name === 'install') {
+    sub
+      .argument('<provider>', 'provedor (ex: hf)')
+      .argument('<repo>', 'repositório (ex: user/repo)')
+      .action(async (provider, repo) => {
+        if (provider === 'hf') {
+          await installHfCommand(repo);
+        } else {
+          console.log(chalk.yellow(`\nProvedor "${provider}" ainda não implementado. Use "hf" para Hugging Face.`));
+        }
+      });
+  } else {
+    sub
+      .argument('[target]', 'O alvo da ação (ex: qwen3.1:8b)')
+      .action((target) => {
+        console.log(chalk.magenta(`\n[caLLM] Executando ${cmd.name} para ${target || 'alvo padrão'}...`));
+        console.log(chalk.gray(`Processo ${cmd.name} iniciado (Simulação). Concluiremos em breve.`));
+      });
+  }
 });
 
 // Comandos de ajuda e fallback

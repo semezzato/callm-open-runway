@@ -1,5 +1,5 @@
-import { IBaseSkill, SkillDefinition } from '../interfaces/ISkill';
-import { MemoryService } from '../services/MemoryService';
+import { IBaseSkill, SkillDefinition } from '../interfaces/ISkill.js';
+import { MemoryService } from '../services/MemoryService.js';
 
 export class MemorySkill implements IBaseSkill {
   private memoryService: MemoryService;

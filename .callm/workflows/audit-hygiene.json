@@ -1,0 +1,14 @@
+{
+  "name": "Audit and Hygiene",
+  "description": "Uma rotina padrão que analisa o projeto e realiza manutenções preventivas.",
+  "steps": [
+    {
+      "skill": "project_hygiene",
+      "action": "clean_logs"
+    },
+    {
+      "agent": "Security",
+      "prompt": "Analise o arquivo ZEN.md e verifique se as diretrizes de segurança estão atualizadas."
+    }
+  ]
+}

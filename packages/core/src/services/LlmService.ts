@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
-import { SkillDefinition } from '../interfaces/ISkill';
+import { SkillDefinition } from '../interfaces/ISkill.js';
 
 export interface LlmConfig {
   apiKey: string;
@@ -24,14 +24,14 @@ export class LlmService {
         description: def.description,
         parameters: {
           type: SchemaType.OBJECT,
-          properties: def.parameters.reduce((acc: any, p) => {
+          properties: def.parameters.reduce((acc: any, p: any) => {
             acc[p.name] = { 
               type: this.mapTypeToSchemaType(p.type), 
               description: p.description 
             };
             return acc;
           }, {}),
-          required: def.parameters.filter(p => p.required).map(p => p.name)
+          required: def.parameters.filter((p: any) => p.required).map((p: any) => p.name)
         }
       }))
     }];

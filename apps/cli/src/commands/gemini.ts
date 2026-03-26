@@ -1,7 +1,7 @@
 import path from 'path';
-import { LlmService } from '@callm/core/src/services/LlmService';
-import { SessionService } from '@callm/core/src/services/SessionService';
-import { startRepl } from '../repl';
+import { LlmService } from '@callm/core';
+import { SessionService } from '@callm/core';
+import { startRepl } from '../repl.js';
 import chalk from 'chalk';
 
 export async function geminiCommand(prompt?: string) {

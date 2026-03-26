@@ -1,0 +1,16 @@
+{
+  "name": "@callm/desktop",
+  "version": "1.0.0",
+  "description": "caLLM Desktop App (Native Wrapper)",
+  "scripts": {
+    "tauri": "tauri",
+    "build": "echo 'Desktop build not yet implemented'"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.0.0",
+    "@tauri-apps/plugin-shell": "^2.0.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0"
+  }
+}

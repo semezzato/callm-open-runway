@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Globe, RefreshCw, Square, Play, Camera, Code } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 const BrowserPage = () => {
   const [url, setUrl] = useState('https://github.com/semezzato/callm-open-runway');

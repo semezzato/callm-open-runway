@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
-import { LlmService, SessionService, SkillLoader, FileSystemSkill, BrowserSkill, MemorySkill, HygieneSkill, AgentService } from '@callm/core';
+import { LlmService, SessionService, SkillLoader, FileSystemSkill, BrowserSkill, MemorySkill, HygieneSkill, PlaybookService, AgentService } from '@callm/core';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -16,6 +16,28 @@ const llmService = new LlmService({ apiKey: process.env.GEMINI_API_KEY || '' });
 const sessionService = new SessionService(dbPath);
 const skillLoader = new SkillLoader();
 const agentService = new AgentService();
+const playbookService = new PlaybookService();
+
+// ... (Banco de dados inicializado)
+
+// Endpoints de Playbooks
+app.get('/api/playbooks', async (req, res) => {
+  try {
+    const playbooks = await playbookService.listPlaybooks();
+    res.json(playbooks);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/playbooks/:id', async (req, res) => {
+  try {
+    const playbook = await playbookService.getPlaybook(req.params.id);
+    res.json(playbook);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Registrar Skills Padrão
 skillLoader.registerSkill(new FileSystemSkill());

@@ -1,7 +1,7 @@
 import readline from 'readline';
 import chalk from 'chalk';
-import { LlmService } from '@callm/core/src/services/LlmService';
-import { SessionService } from '@callm/core/src/services/SessionService';
+import { LlmService } from '@callm/core';
+import { SessionService } from '@callm/core';
 
 export async function startRepl(llm: LlmService, session: SessionService, sessionId: string) {
   const rl = readline.createInterface({

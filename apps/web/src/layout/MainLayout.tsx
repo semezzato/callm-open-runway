@@ -1,5 +1,5 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Terminal, Settings, Layout, Search, Sparkles } from 'lucide-react';
+import { Terminal, Settings, Layout, Search, Sparkles, FileJson } from 'lucide-react';
 import Aurora from '../components/Aurora';
 
 const MainLayout = () => {
@@ -10,6 +10,7 @@ const MainLayout = () => {
     { icon: <Sparkles size={20} />, label: "Chat", path: "/" },
     { icon: <Layout size={20} />, label: "Workspaces", path: "/workspaces" },
     { icon: <Search size={20} />, label: "Browser", path: "/browser" },
+    { icon: <FileJson size={20} />, label: "Playbooks", path: "/playbooks" },
     { icon: <Settings size={20} />, label: "Settings", path: "/settings" },
   ];
 

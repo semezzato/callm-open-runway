@@ -17,10 +17,22 @@
 4.  **Dynamic Skill Loading**: Implementação de um loader dinâmico no `SkillLoader` que utiliza imports assíncronos para carregar ferramentas em tempo de execução sem recompilar o Core.
 5.  **Multi-Agent Context**: Orquestração de perfis (Architect/Coder/Security) através de `systemInstructions` injetadas dinamicamente na `LlmService`.
 
-### 🚧 Hurdles (Obstáculos Vencidos)
-- **Desafio de Navegação**: Sincronizar o background fixo (Aurora/Shaders) com a mudança de rotas no React. Solução: Implementação do `MainLayout` com `Outlet` do React Router para manter o canvas WebGL persistente.
-- **Sincronismo CLI-Server**: Garantir que o comando `callm server` disparasse o processo de forma não bloqueante e com logs espelhados. Solução: Uso de `child_process.spawn` com `stdio: inherit`.
-- **Resolução de Workspace Path**: Conflitos de importação entre `@callm/core` e `@callm/browser` durante a build. Solução: Mapeamento de `paths` no `tsconfig.json` do Core apontando para o source do sibling package.
+## 🧠 Camada Cognitiva (Neurônios e Sinapses)
+- **Neurons**: Arquivos JSON persistentes em `/.callm/neurons/` que armazenam fatos e decisões.
+- **Recall**: Mecanismo de busca semântica/texto que provê contexto de longo prazo aos agentes.
+- **Synapses**: Futuras conexões ponderadas entre neurônios para descoberta de padrões.
+
+## 🌐 Automação Browser (Visão)
+- **Engine**: Playwright disparado via `BrowserSkill`.
+- **Console**: Interface de streaming de ações no Web App para auditoria humana.
+
+## 📋 Orquestração (Playbooks)
+- **Recursos**: Receitas JSON sequenciais que unem Skills e Agentes.
+- **Workflow**: `/.callm/workflows/` é o diretório de comando para automações em massa.
+
+---
+**Status do Projeto: v1.0.0-gold**
+O sistema atingiu a soberania funcional. Todas as lógicas básicas e avançadas de orquestração estão ativas.
 
 ### 🧪 Estado do TDD (Test-Driven Development)
 - **Ratio de Teste**: ~1.3x (Meta: 1.5x). 

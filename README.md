@@ -38,7 +38,33 @@
 ### Install Dependencies
 ```bash
 npm install
-```
+# caLLM (Open Runway) 🚀
+![caLLM Logo](file:///c:/dev/callm-open-runway/assets/Open-Runway-Logo.png)
+
+O orquestrador de LLMs universal, modular e de alta performance, projetado para desenvolvedores seniores.
+
+## ✨ Funcionalidades Elite
+- **🧠 Camada Cognitiva (Neurônios)**: Memória persistente de longo prazo. O sistema aprende com cada interação e recorda conhecimentos em sessões futuras.
+- **🌐 Browser Automation (Visão)**: Integração nativa com Playwrigth para navegação web, análise de DOM e screenshots em tempo real.
+- **📋 Motor de Playbooks**: Orquestração de automações complexas via receitas JSON, combinando múltiplos Agentes e Skills.
+- **🛠️ Skill Engine Dinâmico**: Carregamento de plugins em tempo real via `/.callm/skills`.
+- **🖥️ Multi-Interface**: CLI potente, Web UI de alta fidelidade (Aurora) e Wrapper Desktop nativo (Tauri).
+- **📂 Project Gita**: Inteligência de auto-setup que identifica sua stack e configura o ambiente `.callm` instantaneamente.
+
+## 🛠️ Stack Tecnológica
+- **Core**: Node.js, TypeScript, Gemini 1.5 Pro.
+- **Frontend**: React, Vite, Framer Motion, Tailwind (Vanilla CSS logic).
+- **Backend API**: Express, Knex, SQLite.
+- **Desktop**: Tauri 2.0 (Rust).
+- **Automação**: Playwright.
+
+## 🚀 Início Rápido
+1. `npm install`
+2. `npx callm gita` (Prepara o ambiente)
+3. `npm run dev` (Inicia Web + API)
+
+---
+**caLLM - Build by Logic, Driven by Context.**
 
 ### Core Commands
 - `callm gita`: Initialize the `/.callm` ecosystem in your project root.

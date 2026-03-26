@@ -1,4 +1,4 @@
-import { IBaseSkill } from '../interfaces/ISkill';
+import { IBaseSkill } from '../interfaces/ISkill.js';
 import path from 'path';
 import fs from 'fs';
 

@@ -1,4 +1,4 @@
-import { IBaseSkill, SkillDefinition } from '../interfaces/ISkill';
+import { IBaseSkill, SkillDefinition } from '../interfaces/ISkill.js';
 import { BrowserService } from '@callm/browser';
 import path from 'path';
 
