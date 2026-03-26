@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { LlmService } from '@callm/core';
-import { SessionService } from '@callm/core';
+import path from 'path';
+import { LlmService, SessionService, SkillLoader, FileSystemSkill, AgentService } from '@callm/core';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -10,23 +10,35 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(bodyParser.json());
 
-const llmService = new LlmService();
-const sessionService = new SessionService();
+// Configurações
+const dbPath = path.resolve(process.cwd(), 'callm.sqlite');
+const llmService = new LlmService({ apiKey: process.env.GEMINI_API_KEY || '' });
+const sessionService = new SessionService(dbPath);
+const skillLoader = new SkillLoader();
+const agentService = new AgentService();
+
+// Registrar Skills Padrão
+skillLoader.registerSkill(new FileSystemSkill());
+
+// Listar Agentes Disponíveis
+app.get('/api/agents', (req, res) => {
+  res.json(agentService.listProfiles());
+});
 
 // Inicializa o banco de dados
-sessionService.initialize().then(() => {
-  console.log('Database initialized');
+sessionService.init().then(() => {
+  console.log('Database initialized at:', dbPath);
 });
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', engine: 'caLLM Open Runway' });
 });
 
-// Listar sessões
+// Listar sessões (Ainda não implementado no Core, mas deixamos o mock por enquanto)
 app.get('/api/sessions', async (req, res) => {
   try {
-    const sessions = await sessionService.listSessions();
-    res.json(sessions);
+    // Nota: SessionService precisa de um método para listar sessões únicas
+    res.json([]);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -35,16 +47,16 @@ app.get('/api/sessions', async (req, res) => {
 // Obter histórico de uma sessão
 app.get('/api/sessions/:id/messages', async (req, res) => {
   try {
-    const messages = await sessionService.getMessages(req.params.id);
+    const messages = await sessionService.getSessionHistory(req.params.id);
     res.json(messages);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Chat Endpoint (Streaming ou Simples)
+// Chat Endpoint (Com suporte a Skills e Agentes)
 app.post('/api/chat', async (req, res) => {
-  const { prompt, sessionId } = req.body;
+  const { prompt, sessionId, agentId } = req.body;
   
   if (!prompt) {
     return res.status(400).json({ error: 'Prompt is required' });
@@ -52,19 +64,28 @@ app.post('/api/chat', async (req, res) => {
 
   try {
     const currentSessionId = sessionId || `session_${Date.now()}`;
+    const history = await sessionService.getSessionHistory(currentSessionId);
+    const skillDefs = skillLoader.getAllDefinitions();
     
-    // Salva mensagem do usuário
-    await sessionService.saveMessage(currentSessionId, 'user', prompt);
+    // Busca instruções do agente se houver
+    const agent = agentId ? agentService.getProfile(agentId) : undefined;
+    const systemPrompt = agent?.systemPrompt;
+
+    const chatResponse = await llmService.sendMessage(
+      prompt, 
+      history, 
+      skillDefs,
+      (name, params) => skillLoader.executeSkill(name, params),
+      systemPrompt
+    );
     
-    // Gera resposta (Non-streaming para simplificar primeira integração)
-    const response = await llmService.generateContent(prompt);
-    
-    // Salva resposta do modelo
-    await sessionService.saveMessage(currentSessionId, 'model', response);
+    // Salva no banco
+    await sessionService.addMessage({ session_id: currentSessionId, role: 'user', content: prompt });
+    await sessionService.addMessage({ session_id: currentSessionId, role: 'model', content: chatResponse });
     
     res.json({ 
       sessionId: currentSessionId,
-      content: response 
+      content: chatResponse 
     });
   } catch (error: any) {
     console.error('Chat Error:', error);

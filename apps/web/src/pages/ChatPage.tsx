@@ -9,7 +9,16 @@ const ChatPage = () => {
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [agents, setAgents] = useState<any[]>([]);
+  const [selectedAgentId, setSelectedAgentId] = useState<string>('coder');
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/agents')
+      .then(res => res.json())
+      .then(data => setAgents(data))
+      .catch(err => console.error('Erro ao carregar agentes:', err));
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -29,7 +38,10 @@ const ChatPage = () => {
       const response = await fetch('http://localhost:3001/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: currentInput })
+        body: JSON.stringify({ 
+          prompt: currentInput,
+          agentId: selectedAgentId
+        })
       });
       const data = await response.json();
       
@@ -48,15 +60,34 @@ const ChatPage = () => {
     }
   };
 
+  const currentAgent = agents.find(a => a.id === selectedAgentId) || { name: 'Gemini Pro', role: 'Local Engine' };
+
   return (
     <>
       <header className="h-16 border-b border-white/10 flex items-center justify-between px-6 glass z-10">
         <div className="flex items-center gap-3">
           <h2 className="font-semibold text-lg flex items-center gap-2 text-white">
             <span className="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
-            Gemini Pro
+            {currentAgent.name}
           </h2>
-          <span className="bg-emerald-500/10 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full border border-emerald-500/20 uppercase tracking-widest font-bold">Local Engine</span>
+          <span className="bg-emerald-500/10 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full border border-emerald-500/20 uppercase tracking-widest font-bold">
+            {currentAgent.role}
+          </span>
+        </div>
+        <div className="flex gap-2">
+          {agents.map(agent => (
+            <button
+              key={agent.id}
+              onClick={() => setSelectedAgentId(agent.id)}
+              className={`text-[10px] px-3 py-1 rounded-lg border transition-all ${
+                selectedAgentId === agent.id 
+                  ? 'bg-primary/20 border-primary text-primary shadow-[0_0_10px_rgba(59,130,246,0.3)]' 
+                  : 'border-white/5 text-gray-400 hover:bg-white/5'
+              }`}
+            >
+              {agent.name}
+            </button>
+          ))}
         </div>
       </header>
 
