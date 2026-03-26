@@ -4,7 +4,8 @@
   "description": "caLLM Browser Automation with Playwright",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "tsc --noEmit"
   },
   "dependencies": {
     "playwright": "^1.40.0"

@@ -52,12 +52,35 @@ export async function gitaCommand() {
 `;
     await fs.writeFile(path.join(callmDir, 'ZEN.md'), zenContent);
 
-    // 3. Criar FRONTEND.md e BACKEND.md
-    await fs.writeFile(path.join(callmDir, 'frontend', 'FRONTEND.md'), '# Configurações de Frontend\nIdentifique frameworks (React, Vue, Svelte) e suas versões aqui.');
-    await fs.writeFile(path.join(callmDir, 'backend', 'BACKEND.md'), '# Configurações de Backend\nIdentifique stacks (Node, Python, PHP) e bancos de dados aqui.');
-    await fs.writeFile(path.join(callmDir, 'hygiene', 'HYGIENE.md'), '# Higiene do Projeto\nLogs de limpeza e organização do projeto.');
+    // 3. Detecção de Stack Inteligente
+    const pkgPath = path.join(rootDir, 'package.json');
+    let frontendInfo = 'Frontend: Desconhecido';
+    let backendInfo = 'Backend: Desconhecido';
+    
+    if (await fs.pathExists(pkgPath)) {
+      const pkg = await fs.readJson(pkgPath);
+      const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+      
+      if (deps['react']) frontendInfo = 'Frontend: React detected';
+      if (deps['vue']) frontendInfo = 'Frontend: Vue detected';
+      if (deps['next']) frontendInfo = 'Frontend: Next.js detected';
+      
+      if (deps['express'] || deps['@nestjs/core']) backendInfo = 'Backend: Node.js detected';
+    }
+
+    if (await fs.pathExists(path.join(rootDir, 'requirements.txt'))) {
+      backendInfo = 'Backend: Python detected';
+    }
+
+    // 4. Salvar arquivos de configuração
+    await fs.writeFile(path.join(callmDir, 'frontend', 'FRONTEND.md'), `# FRONTEND.md - Configurações de UI/UX\n\n${frontendInfo}\n\n## Diretrizes Elite\n- Performance: Throttling e Debouncing.\n- UX: Micro-interações Framer Motion.\n- SEO: Semantic HTML único H1.`);
+    
+    await fs.writeFile(path.join(callmDir, 'backend', 'BACKEND.md'), `# BACKEND.md - Configurações de API/DB\n\n${backendInfo}\n\n## Diretrizes Elite\n- Arquitetura: Hexagonal (Domain Driven).\n- Segurança: OWASP Top 10 Sanitization.\n- DB: Caching estratégico (Redis/SQLite).`);
+    
+    await fs.writeFile(path.join(callmDir, 'hygiene', 'HYGIENE.md'), '# HYGIENE.md - Higiene do Projeto\n\nLogs de limpeza e organização do projeto para desembaraço de cadeias de contexto.');
 
     console.log(chalk.green('✔ Diretório .callm inicializado com sucesso!'));
+    console.log(chalk.blue(`Stack identificada: ${frontendInfo} | ${backendInfo}`));
     console.log(chalk.gray(`Localizado em: ${callmDir}`));
     
   } catch (error) {

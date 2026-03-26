@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
-import { LlmService, SessionService, SkillLoader, FileSystemSkill, BrowserSkill, AgentService } from '@callm/core';
+import { LlmService, SessionService, SkillLoader, FileSystemSkill, BrowserSkill, MemorySkill, HygieneSkill, AgentService } from '@callm/core';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -20,6 +20,8 @@ const agentService = new AgentService();
 // Registrar Skills Padrão
 skillLoader.registerSkill(new FileSystemSkill());
 skillLoader.registerSkill(new BrowserSkill());
+skillLoader.registerSkill(new MemorySkill());
+skillLoader.registerSkill(new HygieneSkill());
 
 // Carregar Skills Dinâmicas
 const externalSkillsPath = path.resolve(process.cwd(), '.callm', 'skills');
