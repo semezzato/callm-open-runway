@@ -5,6 +5,8 @@ export * from './services/AgentService.js';
 export * from './services/MemoryService.js';
 export * from './services/PlaybookService.js';
 export * from './services/HuggingFaceService.js';
+export * from './services/LocalLlamaService.js';
+export * from './services/AgentOrchestrator.js';
 export * from './interfaces/ISkill.js';
 export * from './skills/FileSystemSkill.js';
 export * from './skills/BrowserSkill.js';

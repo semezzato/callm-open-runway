@@ -1,17 +1,90 @@
 import { useState, useEffect, useRef } from 'react';
-import { Send, Terminal } from 'lucide-react';
+import { Send, Terminal, Columns, Square } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SplitText from '../components/SplitText';
 
+const ChatPane = ({ 
+    agentId, 
+    agents, 
+    messages, 
+    setMessages, 
+    onSendMessage, 
+    isTyping, 
+    onSelectAgent 
+}: any) => {
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+    }, [messages]);
+
+    const currentAgent = agents.find((a: any) => a.id === agentId) || { name: 'Gemini Pro', role: 'Local Engine' };
+
+    return (
+        <div className="flex-1 flex flex-col min-w-0 border-r border-white/5 last:border-r-0 h-full">
+            <header className="h-12 border-b border-white/10 flex items-center justify-between px-4 glass shrink-0">
+                <div className="flex items-center gap-2 overflow-hidden">
+                    <span className="w-2 h-2 bg-primary rounded-full shrink-0" />
+                    <h3 className="font-medium text-sm text-white truncate">{currentAgent.name}</h3>
+                </div>
+                <select 
+                    value={agentId} 
+                    onChange={(e) => onSelectAgent(e.target.value)}
+                    className="bg-transparent text-[10px] text-gray-400 outline-none border border-white/10 rounded px-1"
+                >
+                    {agents.map((a: any) => (
+                        <option key={a.id} value={a.id}>{a.name}</option>
+                    ))}
+                </select>
+            </header>
+
+            <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide bg-black/20">
+                <AnimatePresence>
+                    {messages.map((msg: any, idx: number) => (
+                        <motion.div 
+                            key={idx}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                        >
+                            <div className={`max-w-[90%] p-3 rounded-xl text-sm ${
+                                msg.role === 'user' 
+                                    ? 'bg-primary/80 text-white shadow-lg' 
+                                    : 'glass text-gray-200 border border-white/5'
+                            }`}>
+                                <p className="leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                            </div>
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
+                {isTyping && (
+                    <div className="flex gap-1 p-1">
+                        <span className="w-1.5 h-1.5 bg-primary/50 rounded-full animate-bounce" />
+                        <span className="w-1.5 h-1.5 bg-primary/50 rounded-full animate-bounce [animation-delay:0.2s]" />
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
 const ChatPage = () => {
-  const [messages, setMessages] = useState([
-    { role: 'model', content: 'Olá! Como posso ajudar na sua passarela de desenvolvimento hoje?' }
-  ]);
-  const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
   const [agents, setAgents] = useState<any[]>([]);
-  const [selectedAgentId, setSelectedAgentId] = useState<string>('coder');
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isSplitView, setIsSplitView] = useState(false);
+  
+  // Pane 1 State
+  const [messages1, setMessages1] = useState([{ role: 'model', content: 'Inicie sua trilha de desenvolvimento aqui.' }]);
+  const [agent1, setAgent1] = useState('coder');
+  const [isTyping1, setIsTyping1] = useState(false);
+
+  // Pane 2 State
+  const [messages2, setMessages2] = useState([{ role: 'model', content: 'Pronto para colaborar em paralelo.' }]);
+  const [agent2, setAgent2] = useState('architect');
+  const [isTyping2, setIsTyping2] = useState(false);
+
+  const [input, setInput] = useState('');
 
   useEffect(() => {
     fetch('http://localhost:3001/api/agents')
@@ -20,142 +93,94 @@ const ChatPage = () => {
       .catch(err => console.error('Erro ao carregar agentes:', err));
   }, []);
 
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [messages]);
-
   const handleSend = async () => {
     if (!input.trim()) return;
-    const userMessage = { role: 'user', content: input };
-    setMessages(prev => [...prev, userMessage]);
     const currentInput = input;
     setInput('');
-    setIsTyping(true);
 
-    try {
-      const response = await fetch('http://localhost:3001/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          prompt: currentInput,
-          agentId: selectedAgentId
-        })
-      });
-      const data = await response.json();
-      
-      setMessages(prev => [...prev, { 
-        role: 'model', 
-        content: data.content 
-      }]);
-    } catch (error) {
-      console.error('API Error:', error);
-      setMessages(prev => [...prev, { 
-        role: 'model', 
-        content: 'Ops! O servidor API parece estar offline. Tente rodar "callm server" no seu terminal!' 
-      }]);
-    } finally {
-      setIsTyping(false);
+    // Se estiver em Split View, envia para ambos (Orquestração Básica)
+    // Se não, envia apenas para o Pane 1
+    const sendToAgent = async (prompt: string, agentId: string, setMessages: any, setIsTyping: any) => {
+        setMessages((prev: any) => [...prev, { role: 'user', content: prompt }]);
+        setIsTyping(true);
+        try {
+            const response = await fetch('http://localhost:3001/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, agentId })
+            });
+            const data = await response.json();
+            setMessages((prev: any) => [...prev, { role: 'model', content: data.content }]);
+        } catch (e) {
+            setMessages((prev: any) => [...prev, { role: 'model', content: 'Erro de conexão.' }]);
+        } finally {
+            setIsTyping(false);
+        }
+    };
+
+    if (isSplitView) {
+        sendToAgent(currentInput, agent1, setMessages1, setIsTyping1);
+        sendToAgent(currentInput, agent2, setMessages2, setIsTyping2);
+    } else {
+        sendToAgent(currentInput, agent1, setMessages1, setIsTyping1);
     }
   };
 
-  const currentAgent = agents.find(a => a.id === selectedAgentId) || { name: 'Gemini Pro', role: 'Local Engine' };
-
   return (
-    <>
-      <header className="h-16 border-b border-white/10 flex items-center justify-between px-6 glass z-10">
-        <div className="flex items-center gap-3">
-          <h2 className="font-semibold text-lg flex items-center gap-2 text-white">
-            <span className="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
-            {currentAgent.name}
-          </h2>
-          <span className="bg-emerald-500/10 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full border border-emerald-500/20 uppercase tracking-widest font-bold">
-            {currentAgent.role}
-          </span>
-        </div>
-        <div className="flex gap-2">
-          {agents.map(agent => (
-            <button
-              key={agent.id}
-              onClick={() => setSelectedAgentId(agent.id)}
-              className={`text-[10px] px-3 py-1 rounded-lg border transition-all ${
-                selectedAgentId === agent.id 
-                  ? 'bg-primary/20 border-primary text-primary shadow-[0_0_10px_rgba(59,130,246,0.3)]' 
-                  : 'border-white/5 text-gray-400 hover:bg-white/5'
-              }`}
+    <div className="flex flex-col h-full bg-background relative">
+      <header className="h-16 border-b border-white/10 flex items-center justify-between px-6 glass z-20 shrink-0">
+        <div className="flex items-center gap-4">
+            <h2 className="text-white font-bold tracking-tight">Aurora Dashboard</h2>
+            <button 
+                onClick={() => setIsSplitView(!isSplitView)}
+                className="p-1.5 rounded-lg border border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+                title={isSplitView ? "Voltar para View Única" : "Habilitar Split View"}
             >
-              {agent.name}
+                {isSplitView ? <Square size={16} /> : <Columns size={16} />}
             </button>
-          ))}
         </div>
+        <div className="text-[10px] text-gray-500 font-mono">STATUS: STABLE_V1</div>
       </header>
 
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide">
-        {messages.length === 1 && (
-          <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="w-20 h-20 premium-gradient rounded-3xl flex items-center justify-center shadow-2xl mb-6 neon-border"
-            >
-              <Terminal className="text-white w-10 h-10" />
-            </motion.div>
-            <SplitText 
-              text="Welcome to the Runway" 
-              className="text-4xl md:text-5xl font-black tracking-tighter text-white" 
+      <main className="flex-1 flex overflow-hidden">
+        <ChatPane 
+            agentId={agent1} 
+            agents={agents} 
+            messages={messages1} 
+            setMessages={setMessages1} 
+            isTyping={isTyping1} 
+            onSelectAgent={setAgent1}
+        />
+        {isSplitView && (
+            <ChatPane 
+                agentId={agent2} 
+                agents={agents} 
+                messages={messages2} 
+                setMessages={setMessages2} 
+                isTyping={isTyping2} 
+                onSelectAgent={setAgent2}
             />
-            <p className="text-gray-400 max-w-sm text-sm uppercase tracking-widest font-light">
-              Secure, Logic-First AI Orchestration
-            </p>
-          </div>
         )}
+      </main>
 
-        <AnimatePresence>
-          {messages.length > 1 && messages.map((msg, idx) => (
-            <motion.div 
-              key={idx}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
-              <div className={`max-w-[80%] p-4 rounded-2xl ${
-                msg.role === 'user' 
-                  ? 'bg-primary/90 text-white shadow-xl neon-border backdrop-blur-md' 
-                  : 'glass text-gray-200 border border-white/5'
-              }`}>
-                <p className="leading-relaxed whitespace-pre-wrap text-sm md:text-base">{msg.content}</p>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-        {isTyping && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-2 p-2">
-            <span className="w-2 h-2 bg-primary/50 rounded-full animate-bounce" />
-            <span className="w-2 h-2 bg-primary/50 rounded-full animate-bounce [animation-delay:0.2s]" />
-            <span className="w-2 h-2 bg-primary/50 rounded-full animate-bounce [animation-delay:0.4s]" />
-          </motion.div>
-        )}
-      </div>
-
-      <div className="p-6 bg-gradient-to-t from-background via-background/80 to-transparent">
+      <footer className="p-6 bg-gradient-to-t from-background via-background/90 to-transparent shrink-0">
         <div className="max-w-4xl mx-auto relative group">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend())}
-            placeholder="Deploy your master logic here..."
-            className="w-full bg-white/5 border border-white/10 rounded-2xl py-5 pl-5 pr-16 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none h-16 min-h-[64px] glass placeholder:text-gray-600 text-lg shadow-2xl text-white"
+            placeholder={isSplitView ? "Comando para os Agentes..." : "Fale com o caLLM..."}
+            className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-5 pr-16 focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all resize-none h-14 glass text-white text-sm"
           />
           <button 
             onClick={handleSend}
-            className="absolute right-4 bottom-4 p-2.5 premium-gradient text-white rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-transform"
+            className="absolute right-3 bottom-3 p-2 premium-gradient text-white rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-transform"
           >
-            <Send size={22} />
+            <Send size={18} />
           </button>
         </div>
-      </div>
-    </>
+      </footer>
+    </div>
   );
 };
 

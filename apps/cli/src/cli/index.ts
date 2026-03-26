@@ -11,6 +11,7 @@ dotenv.config({ path: path.join(process.cwd(), '.callm', '.env') });
 
 import { gitaCommand } from '../commands/gita.js';
 import { geminiCommand } from '../commands/gemini.js';
+import { localCommand } from '../commands/local.js';
 
 const program = new Command();
 
@@ -37,7 +38,7 @@ program
     await geminiCommand(prompt);
   });
 
-const otherLlms = ['claude', 'ollama', 'local'];
+const otherLlms = ['claude', 'ollama'];
 otherLlms.forEach(llm => {
   program
     .command(llm)
@@ -106,6 +107,7 @@ const managementCmds = [
 ];
 
 import { installHfCommand } from '../commands/install.js';
+import { chatCommand } from '../commands/chat.js';
 
 managementCmds.forEach(cmd => {
   const sub = program
@@ -117,9 +119,10 @@ managementCmds.forEach(cmd => {
     sub
       .argument('<provider>', 'provedor (ex: hf)')
       .argument('<repo>', 'repositório (ex: user/repo)')
-      .action(async (provider, repo) => {
+      .argument('[file]', 'arquivo específico (ex: model.gguf)')
+      .action(async (provider, repo, file) => {
         if (provider === 'hf') {
-          await installHfCommand(repo);
+          await installHfCommand(repo, file);
         } else {
           console.log(chalk.yellow(`\nProvedor "${provider}" ainda não implementado. Use "hf" para Hugging Face.`));
         }
@@ -134,6 +137,17 @@ managementCmds.forEach(cmd => {
   }
 });
 
+// Registrar comando de inferência local
+localCommand(program);
+
+program
+  .command('chat')
+  .description('Inicia o dashboard de chat interativo (estilo Claude)')
+  .option('-l, --local <model>', 'Caminho para o modelo GGUF local')
+  .action(async (options) => {
+    await chatCommand(options);
+  });
+
 // Comandos de ajuda e fallback
 program.on('--help', () => {
   console.log('');
@@ -145,5 +159,6 @@ program.on('--help', () => {
 program.parse(process.argv);
 
 if (!process.argv.slice(2).length) {
-  program.outputHelp();
+  // Se rodar apenas "callm", abre o chat interativo
+  await chatCommand();
 }

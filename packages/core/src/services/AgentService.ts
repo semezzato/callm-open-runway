@@ -1,3 +1,6 @@
+import { LlmService } from "./LlmService.js";
+import { MemoryService } from "./MemoryService.js";
+
 export interface AgentProfile {
   id: string;
   name: string;
@@ -10,7 +13,10 @@ export interface AgentProfile {
 export class AgentService {
   private profiles: Map<string, AgentProfile> = new Map();
 
-  constructor() {
+  constructor(
+      private llm: LlmService,
+      private memory: MemoryService
+  ) {
     this.initDefaultProfiles();
   }
 
@@ -22,7 +28,7 @@ export class AgentService {
       systemPrompt: `Você é o Arquiteto de Sistemas do caLLM. 
 Sua missão é garantir que o código siga os princípios de Anti-Vibecoding, TDD e Clean Architecture.
 Você é cético, focado em performance e odeia o "Efeito Frankenstein".
-Sempre sugira abstrações como Services e Adapters antes de empilhar código.`,
+Sempre sugira abrações como Services e Adapters antes de empilhar código.`,
       defaultSkills: ['file_system'],
       icon: 'Layout'
     });
@@ -47,6 +53,19 @@ Sua missão é caçar vulnerabilidades (OWASP), garantir sanitização de dados 
       defaultSkills: ['file_system'],
       icon: 'ShieldCheck'
     });
+  }
+
+  async think(prompt: string, profileId: string = 'coder', history: any[] = []): Promise<string> {
+    const profile = this.getProfile(profileId);
+    const systemInstruction = profile ? profile.systemPrompt : undefined;
+    
+    // Recuperar contexto da memória antes de pensar
+    const recalled = await this.memory.recall(prompt);
+    const augmentedPrompt = recalled.length > 0 
+        ? `Memórias Relevantes: ${JSON.stringify(recalled.map(n => n.content))}\n\nPrompt: ${prompt}`
+        : prompt;
+
+    return this.llm.sendMessage(augmentedPrompt, history, [], undefined, systemInstruction);
   }
 
   getProfile(id: string): AgentProfile | undefined {

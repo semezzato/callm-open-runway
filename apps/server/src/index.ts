@@ -2,7 +2,19 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
-import { LlmService, SessionService, SkillLoader, FileSystemSkill, BrowserSkill, MemorySkill, HygieneSkill, PlaybookService, AgentService } from '@callm/core';
+import { 
+  LlmService, 
+  SessionService, 
+  SkillLoader, 
+  FileSystemSkill, 
+  BrowserSkill, 
+  MemorySkill, 
+  HygieneSkill, 
+  PlaybookService, 
+  AgentService,
+  MemoryService,
+  AgentOrchestrator
+} from '@callm/core';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -12,10 +24,13 @@ app.use(bodyParser.json());
 
 // Configurações
 const dbPath = path.resolve(process.cwd(), 'callm.sqlite');
+const memoryPath = path.resolve(process.cwd(), '.callm', 'neurons');
 const llmService = new LlmService({ apiKey: process.env.GEMINI_API_KEY || '' });
 const sessionService = new SessionService(dbPath);
+const memoryService = new MemoryService(memoryPath);
 const skillLoader = new SkillLoader();
-const agentService = new AgentService();
+const agentService = new AgentService(llmService, memoryService);
+const orchestrator = new AgentOrchestrator(llmService, memoryService);
 const playbookService = new PlaybookService();
 
 // ... (Banco de dados inicializado)
@@ -117,6 +132,22 @@ app.post('/api/chat', async (req, res) => {
     });
   } catch (error: any) {
     console.error('Chat Error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Novo endpoint de Orquestração Paralela
+app.post('/api/orchestrate', async (req, res) => {
+  const { tasks } = req.body;
+  if (!tasks || !Array.isArray(tasks)) {
+    return res.status(400).json({ error: 'Tasks array is required' });
+  }
+
+  try {
+    const results = await orchestrator.runParallel(tasks);
+    res.json({ results });
+  } catch (error: any) {
+    console.error('Orchestration Error:', error);
     res.status(500).json({ error: error.message });
   }
 });

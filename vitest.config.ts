@@ -2,12 +2,8 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    globals: true,
+    exclude: ['**/node_modules/**', '**/dist/**', 'tests/e2e/**'],
     environment: 'node',
-    include: ['tests/**/*.test.ts'],
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-    },
+    globals: true,
   },
 });
