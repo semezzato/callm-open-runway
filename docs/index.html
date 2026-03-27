@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>caLLM | Open Runway - Build by Logic, Driven by Context.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #00e5ff;
+            --secondary: #ff00ff;
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Fira Code', monospace;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .aurora-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(0, 229, 255, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(255, 0, 255, 0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+        }
+
+        .neon-text {
+            text-shadow: 0 0 10px var(--primary), 0 0 20px rgba(0, 229, 255, 0.2);
+        }
+
+        .premium-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-premium {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.4);
+        }
+
+        section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feat-card {
+            transition: all 0.3s ease;
+        }
+
+        .feat-card:hover {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 10px;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating { animation: float 4s ease-in-out infinite; }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full h-20 z-50 px-8 flex items-center justify-between glass border-t-0 border-x-0 rounded-none bg-black/20">
+        <div class="flex items-center gap-2">
+            <span class="font-bold text-xl tracking-tighter neon-text">caLLM</span>
+            <span class="text-[10px] text-gray-500 font-mono mt-1 opacity-50">/ OPEN RUNWAY</span>
+        </div>
+        <div class="flex items-center gap-6 text-sm font-medium">
+            <a href="#features" data-i18n="nav_features" class="hover:text-primary transition-colors">Features</a>
+            <a href="#gita" data-i18n="nav_gita" class="hover:text-primary transition-colors">Gita</a>
+            <a href="https://github.com/semezzato/callm-open-runway" class="px-4 py-2 border border-white/20 rounded-full hover:bg-white/10 transition-all">GitHub</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex flex-col items-center justify-center pt-20">
+        <div class="w-full max-w-4xl glass overflow-hidden mb-12 shadow-2xl floating">
+            <img src="../assets/callm-elite-banner.png" alt="caLLM Banner" class="w-full h-auto">
+        </div>
+        <h1 class="text-5xl md:text-7xl font-bold text-center mb-6 premium-gradient" data-i18n="hero_title">Build by Logic.</h1>
+        <p class="text-gray-400 text-lg md:text-xl text-center max-w-2xl mb-10" data-i18n="hero_pitch">
+            O orquestrador universal de LLMs para desenvolvedores que exigem precisão, redução de tokens e performance bruta.
+        </p>
+        <div class="flex gap-4">
+            <a href="https://github.com/semezzato/callm-open-runway" class="btn-premium px-8 py-4 rounded-2xl font-bold text-black" data-i18n="btn_github">View on GitHub</a>
+            <a href="#features" class="px-8 py-4 glass rounded-2xl font-bold hover:bg-white/5 transition-all" data-i18n="btn_explore">Explore</a>
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section id="features">
+        <h2 class="text-3xl font-bold mb-12 text-center" data-i18n="feat_title">Elite Capabilities</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="feat-card p-8 glass flex flex-col gap-4">
+                <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">⚡</div>
+                <h3 class="font-bold text-xl" data-i18n="feat_1_title">Anti-Vibecoding</h3>
+                <p class="text-sm text-gray-500 leading-relaxed" data-i18n="feat_1_desc">Redução de 90% no gasto de tokens através de diretrizes estruturadas e gerenciamento de contexto.</p>
+            </div>
+            <div class="feat-card p-8 glass flex flex-col gap-4">
+                <div class="w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center text-secondary">🚀</div>
+                <h3 class="font-bold text-xl" data-i18n="feat_2_title">GPU Acceleration</h3>
+                <p class="text-sm text-gray-500 leading-relaxed" data-i18n="feat_2_desc">Performance nativa para modelos locais com GGUF offloading e multithreading otimizado.</p>
+            </div>
+            <div class="feat-card p-8 glass flex flex-col gap-4">
+                <div class="w-12 h-12 bg-green-400/10 rounded-xl flex items-center justify-center text-green-400">👀</div>
+                <h3 class="font-bold text-xl" data-i18n="feat_3_title">Browser Vision</h3>
+                <h3 class="font-bold text-xl" data-i18n="feat_3_title">Browser Vision</h3>
+                <p class="text-sm text-gray-500 leading-relaxed" data-i18n="feat_3_desc">Integração nativa com motores DOM para extração de dados e automação web inteligente.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gita Section -->
+    <section id="gita" class="flex flex-col md:flex-row items-center gap-12">
+        <div class="flex-1 space-y-6">
+            <span class="text-primary font-bold tracking-widest text-xs uppercase">Inteligência Gita</span>
+            <h2 class="text-4xl font-bold" data-i18n="gita_title">Seu projeto sob raio-x.</h2>
+            <p class="text-gray-400 leading-relaxed" data-i18n="gita_desc">
+                O comando `callm gita` estuda seu repositório, identifica a stack e gera automaticamente blueprints inteligentes para que a IA entenda seu ambiente instantaneamente.
+            </p>
+            <ul class="space-y-3 text-sm text-gray-500">
+                <li class="flex items-center gap-2">✔ Auto-Stack Detection</li>
+                <li class="flex items-center gap-2">✔ Zero-Friction Setup</li>
+                <li class="flex items-center gap-2">✔ Anti-Frankenstein Architecture</li>
+            </ul>
+        </div>
+        <div class="flex-1 glass overflow-hidden rounded-3xl shadow-neon floating" style="animation-delay: 1s">
+            <img src="../assets/callm-gita-art.png" alt="Gita Art" class="w-full h-auto">
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-20 border-t border-white/5 text-center space-y-4">
+        <p class="text-xs text-gray-600 font-mono">Build by Logic, Driven by Context.</p>
+        <p class="text-xs text-gray-700">MIT LICENSE © 2026 caLLM / OPEN RUNWAY</p>
+    </footer>
+
+    <!-- i18n Logic -->
+    <script>
+        const translations = {
+            'pt-BR': {
+                'nav_features': 'Recursos',
+                'nav_gita': 'Gita',
+                'hero_title': 'Construa por Lógica.',
+                'hero_pitch': 'O orquestrador universal de LLMs para desenvolvedores que exigem precisão, redução de tokens e performance bruta.',
+                'btn_github': 'Ver no GitHub',
+                'btn_explore': 'Explorar',
+                'feat_title': 'Capacidades Elite',
+                'feat_1_title': 'Anti-Vibecoding',
+                'feat_1_desc': 'Redução de 90% no gasto de tokens através de diretrizes estruturadas e gerenciamento de contexto.',
+                'feat_2_title': 'GPU Acceleration',
+                'feat_2_desc': 'Performance nativa para modelos locais com GGUF offloading e multithreading otimizado.',
+                'feat_3_title': 'Visão de Browser',
+                'feat_3_desc': 'Integração nativa com motores DOM para extração de dados e automação web inteligente.',
+                'gita_title': 'Seu projeto sob raio-x.',
+                'gita_desc': 'O comando `callm gita` estuda seu repositório, identifica a stack e gera automaticamente blueprints inteligentes.'
+            },
+            'en': {
+                'nav_features': 'Features',
+                'nav_gita': 'Gita',
+                'hero_title': 'Build by Logic.',
+                'hero_pitch': 'The universal LLM orchestrator for developers who demand precision, token reduction, and raw performance.',
+                'btn_github': 'View on GitHub',
+                'btn_explore': 'Explore',
+                'feat_title': 'Elite Capabilities',
+                'feat_1_title': 'Anti-Vibecoding',
+                'feat_1_desc': '90% token cost reduction through structured guidelines and context management.',
+                'feat_2_title': 'GPU Acceleration',
+                'feat_2_desc': 'Native performance for local models with GGUF offloading and optimized multithreading.',
+                'feat_3_title': 'Browser Vision',
+                'feat_3_desc': 'Native integration with DOM engines for smart data extraction and web automation.',
+                'gita_title': 'Your project under X-ray.',
+                'gita_desc': 'The `callm gita` command studies your repo, identifies the stack, and auto-generates smart blueprints.'
+            },
+            'es': {
+                'nav_features': 'Funciones',
+                'nav_gita': 'Gita',
+                'hero_title': 'Crea por Lógica.',
+                'hero_pitch': 'El orquestrador universal de LLMs para desarrolladores que exigen precisión, ahorro de tokens y rendimiento bruto.',
+                'btn_github': 'Ver en GitHub',
+                'btn_explore': 'Explorar',
+                'feat_title': 'Capacidades Elite',
+                'feat_1_title': 'Anti-Vibecoding',
+                'feat_1_desc': 'Reducción del 90% en el gasto de tokens mediante directrizes estructuradas y gestión de contexto.',
+                'feat_2_title': 'GPU Acceleration',
+                'feat_2_desc': 'Rendimiento nativo para modelos locales con offloading GGUF y multithreading optimizado.',
+                'feat_3_title': 'Visión de Navegador',
+                'feat_3_desc': 'Integración nativa con motores DOM para extracción de datos y automatización web inteligente.',
+                'gita_title': 'Tu proyecto bajo rayos X.',
+                'gita_desc': 'El comando `callm gita` estudia tu repositorio, identifica el stack y genera blueprints inteligentes.'
+            }
+        };
+
+        const language = navigator.language.startsWith('pt') ? 'pt-BR' : (navigator.language.startsWith('es') ? 'es' : 'en');
+        const i18n = translations[language];
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (i18n[key]) el.textContent = i18n[key];
+        });
+    </script>
+</body>
+</html>

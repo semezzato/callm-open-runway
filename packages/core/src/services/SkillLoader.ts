@@ -1,6 +1,7 @@
 import { IBaseSkill } from '../interfaces/ISkill.js';
 import path from 'path';
 import fs from 'fs';
+import { pathToFileURL } from 'url';
 
 export class SkillLoader {
   private skills: Map<string, IBaseSkill> = new Map();
@@ -29,7 +30,8 @@ export class SkillLoader {
     for (const file of files) {
       try {
         const fullPath = path.resolve(dirPath, file);
-        const { default: SkillClass } = await import(fullPath);
+        const fileUrl = `${pathToFileURL(fullPath).toString()}?t=${Date.now()}`;
+        const { default: SkillClass } = await import(fileUrl);
         if (SkillClass && typeof SkillClass === 'function') {
           this.registerSkill(new SkillClass());
         }
