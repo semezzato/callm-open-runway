@@ -54,34 +54,53 @@ export async function gitaCommand() {
 
     // 3. Detecção de Stack Inteligente
     const pkgPath = path.join(rootDir, 'package.json');
-    let frontendInfo = 'Frontend: Desconhecido';
-    let backendInfo = 'Backend: Desconhecido';
+    let blueprint: any = {
+      project: path.basename(rootDir),
+      stack: {
+        frontend: 'Desconhecido',
+        backend: 'Desconhecido',
+        runtime: 'Node.js'
+      },
+      database: 'Desconhecido',
+      detectedAt: new Date().toISOString()
+    };
     
     if (await fs.pathExists(pkgPath)) {
       const pkg = await fs.readJson(pkgPath);
       const deps = { ...pkg.dependencies, ...pkg.devDependencies };
       
-      if (deps['react']) frontendInfo = 'Frontend: React detected';
-      if (deps['vue']) frontendInfo = 'Frontend: Vue detected';
-      if (deps['next']) frontendInfo = 'Frontend: Next.js detected';
+      if (deps['react']) blueprint.stack.frontend = 'React';
+      if (deps['vue']) blueprint.stack.frontend = 'Vue';
+      if (deps['next']) blueprint.stack.frontend = 'Next.js';
       
-      if (deps['express'] || deps['@nestjs/core']) backendInfo = 'Backend: Node.js detected';
+      if (deps['express'] || deps['@nestjs/core']) blueprint.stack.backend = 'Express/NestJS';
+      if (deps['prisma']) blueprint.database = 'Prisma';
+      if (deps['mongoose']) blueprint.database = 'MongoDB';
+      if (deps['knex'] || deps['sqlite3']) blueprint.database = 'SQLite/SQL';
     }
 
     if (await fs.pathExists(path.join(rootDir, 'requirements.txt'))) {
-      backendInfo = 'Backend: Python detected';
+      blueprint.stack.backend = 'Python';
+    }
+
+    // Gravar Blueprint
+    await fs.writeJson(path.join(callmDir, 'blueprint.json'), blueprint, { spaces: 2 });
+
+    if (await fs.pathExists(path.join(rootDir, 'requirements.txt'))) {
+      blueprint.stack.backend = 'Python';
     }
 
     // 4. Salvar arquivos de configuração
-    await fs.writeFile(path.join(callmDir, 'frontend', 'FRONTEND.md'), `# FRONTEND.md - Configurações de UI/UX\n\n${frontendInfo}\n\n## Diretrizes Elite\n- Performance: Throttling e Debouncing.\n- UX: Micro-interações Framer Motion.\n- SEO: Semantic HTML único H1.`);
+    await fs.writeFile(path.join(callmDir, 'frontend', 'FRONTEND.md'), `# FRONTEND.md - Configurações de UI/UX\n\nFrontend: ${blueprint.stack.frontend}\n\n## Diretrizes Elite\n- Performance: Throttling e Debouncing.\n- UX: Micro-interações Framer Motion.\n- SEO: Semantic HTML único H1.`);
     
-    await fs.writeFile(path.join(callmDir, 'backend', 'BACKEND.md'), `# BACKEND.md - Configurações de API/DB\n\n${backendInfo}\n\n## Diretrizes Elite\n- Arquitetura: Hexagonal (Domain Driven).\n- Segurança: OWASP Top 10 Sanitization.\n- DB: Caching estratégico (Redis/SQLite).`);
+    await fs.writeFile(path.join(callmDir, 'backend', 'BACKEND.md'), `# BACKEND.md - Configurações de API/DB\n\nBackend: ${blueprint.stack.backend}\n\n## Diretrizes Elite\n- Arquitetura: Hexagonal (Domain Driven).\n- Segurança: OWASP Top 10 Sanitization.\n- DB: Caching estratégico (Redis/SQLite).`);
     
     await fs.writeFile(path.join(callmDir, 'hygiene', 'HYGIENE.md'), '# HYGIENE.md - Higiene do Projeto\n\nLogs de limpeza e organização do projeto para desembaraço de cadeias de contexto.');
 
     console.log(chalk.green('✔ Diretório .callm inicializado com sucesso!'));
-    console.log(chalk.blue(`Stack identificada: ${frontendInfo} | ${backendInfo}`));
-    console.log(chalk.gray(`Localizado em: ${callmDir}`));
+    console.log(chalk.blue(`Stack identificada: ${blueprint.stack.frontend} | ${blueprint.stack.backend}`));
+    console.log(chalk.magenta(`Banco de dados sugerido: ${blueprint.database}`));
+    console.log(chalk.gray(`Blueprint gerado em: .callm/blueprint.json`));
     
   } catch (error) {
     console.error(chalk.red('Erro ao inicializar o check-up:'), error);

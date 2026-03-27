@@ -1,14 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
-import { Send, Terminal, Columns, Square } from 'lucide-react';
+import { Send, Columns, Square } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import SplitText from '../components/SplitText';
 
 const ChatPane = ({ 
     agentId, 
     agents, 
     messages, 
-    setMessages, 
-    onSendMessage, 
     isTyping, 
     onSelectAgent 
 }: any) => {
@@ -70,28 +66,54 @@ const ChatPane = ({
     );
 };
 
+import { useState, useEffect, useRef } from 'react';
+
 const ChatPage = () => {
   const [agents, setAgents] = useState<any[]>([]);
   const [isSplitView, setIsSplitView] = useState(false);
+  const [sessionId, setSessionId] = useState(`session_${Date.now()}`);
   
   // Pane 1 State
-  const [messages1, setMessages1] = useState([{ role: 'model', content: 'Inicie sua trilha de desenvolvimento aqui.' }]);
-  const [agent1, setAgent1] = useState('coder');
+  const [messages1, setMessages1] = useState<any[]>([]);
+  const [agent1, setAgent1] = useState('gemini');
   const [isTyping1, setIsTyping1] = useState(false);
 
   // Pane 2 State
-  const [messages2, setMessages2] = useState([{ role: 'model', content: 'Pronto para colaborar em paralelo.' }]);
-  const [agent2, setAgent2] = useState('architect');
+  const [messages2, setMessages2] = useState<any[]>([]);
+  const [agent2, setAgent2] = useState('gemini');
   const [isTyping2, setIsTyping2] = useState(false);
 
   const [input, setInput] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/agents')
-      .then(res => res.json())
-      .then(data => setAgents(data))
-      .catch(err => console.error('Erro ao carregar agentes:', err));
-  }, []);
+    // Carrega Agentes e Modelos Locais
+    Promise.all([
+        fetch('http://localhost:3001/api/agents').then(res => res.json()),
+        fetch('http://localhost:3001/api/models/local').then(res => res.json())
+    ]).then(([agentData, localModels]) => {
+        setAgents([...agentData, ...localModels]);
+    }).catch(err => console.error('Erro ao carregar dados:', err));
+
+    // Carrega histórico se houver
+    fetch(`http://localhost:3001/api/sessions/${sessionId}/messages`)
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.length > 0) setMessages1(data);
+            else setMessages1([{ role: 'model', content: 'Inicie sua trilha de desenvolvimento aqui.' }]);
+        });
+  }, [sessionId]);
+
+  const handleSelectModel = async (modelId: string, pane: number) => {
+    if (pane === 1) setAgent1(modelId);
+    else setAgent2(modelId);
+
+    // Salva o modelo para a sessão no backend
+    await fetch(`http://localhost:3001/api/sessions/${sessionId}/model`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ modelId })
+    });
+  };
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -107,7 +129,7 @@ const ChatPage = () => {
             const response = await fetch('http://localhost:3001/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt, agentId })
+                body: JSON.stringify({ prompt, agentId, sessionId })
             });
             const data = await response.json();
             setMessages((prev: any) => [...prev, { role: 'model', content: data.content }]);
@@ -149,7 +171,7 @@ const ChatPage = () => {
             messages={messages1} 
             setMessages={setMessages1} 
             isTyping={isTyping1} 
-            onSelectAgent={setAgent1}
+            onSelectAgent={(id: string) => handleSelectModel(id, 1)}
         />
         {isSplitView && (
             <ChatPane 
@@ -158,7 +180,7 @@ const ChatPage = () => {
                 messages={messages2} 
                 setMessages={setMessages2} 
                 isTyping={isTyping2} 
-                onSelectAgent={setAgent2}
+                onSelectAgent={(id: string) => handleSelectModel(id, 2)}
             />
         )}
       </main>

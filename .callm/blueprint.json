@@ -1,0 +1,9 @@
+{
+  "project": "callm-open-runway",
+  "stack": {
+    "framework": "Vanilla/Other",
+    "runtime": "Node.js"
+  },
+  "database": "Desconhecido",
+  "detectedAt": "2026-03-27T01:13:47.450Z"
+}

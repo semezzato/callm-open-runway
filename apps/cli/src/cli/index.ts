@@ -107,7 +107,7 @@ const managementCmds = [
 ];
 
 import { installHfCommand } from '../commands/install.js';
-import { chatCommand } from '../commands/chat.js';
+import { chatCommand, welcomeFlow } from '../commands/chat.js';
 
 managementCmds.forEach(cmd => {
   const sub = program
@@ -156,9 +156,9 @@ program.on('--help', () => {
   console.log(`  $ ${chalk.cyan('callm run')}`);
 });
 
-program.parse(process.argv);
-
+// Se rodar apenas "callm", abre o fluxo de boas-vindas e menu interativo
 if (!process.argv.slice(2).length) {
-  // Se rodar apenas "callm", abre o chat interativo
-  await chatCommand();
+  await welcomeFlow();
+} else {
+  await program.parseAsync(process.argv);
 }
