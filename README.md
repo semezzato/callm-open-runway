@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/callm-elite-banner.png" alt="caLLM Elite Banner" width="100%">
+  <img src="./assets/Open-Runway-Logo.png" alt="caLLM Elite Banner" width="45%">
 </p>
 
 # caLLM (Open Runway) — Build by Logic, Driven by Context.
